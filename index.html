@@ -15,6 +15,62 @@
         </header>
 
         <div class="calculator-grid">
+
+<!-- Panel de Comparación Múltiple -->
+<div class="card comparison-panel">
+    <div class="comparison-header">
+        <h2>📊 Comparación de Productos</h2>
+        <div class="comparison-actions">
+            <span class="product-count" id="productCount">0/5 productos</span>
+            <button class="btn-secondary" onclick="addCurrentToComparison()">
+                + Agregar actual
+            </button>
+            <button class="btn-text" onclick="clearComparison()">
+                Limpiar todo
+            </button>
+        </div>
+    </div>
+
+    <div class="comparison-content" id="comparisonContent">
+        <div class="comparison-placeholder">
+            <p>Agrega productos para comparar su rentabilidad</p>
+            <p class="hint">Calcula un producto y haz clic en "Agregar actual"</p>
+        </div>
+    </div>
+
+    <!-- Resumen de comparación -->
+    <div class="comparison-summary" id="comparisonSummary" style="display: none;">
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h4>🏆 Mejor Producto</h4>
+                <div id="bestProduct"></div>
+            </div>
+            <div class="summary-card">
+                <h4>📈 Promedios</h4>
+                <div id="averageMetrics"></div>
+            </div>
+            <div class="summary-card">
+                <h4>💡 Recomendación</h4>
+                <div id="recommendation"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráfico de comparación -->
+<div class="card chart-panel" id="chartPanel" style="display: none;">
+    <h2>📈 Visualización Comparativa</h2>
+    <div class="chart-tabs">
+        <button class="chart-tab active" onclick="switchChart('profit')">Ganancia</button>
+        <button class="chart-tab" onclick="switchChart('margin')">Margen</button>
+        <button class="chart-tab" onclick="switchChart('roi')">ROI</button>
+    </div>
+    <div class="comparison-chart" id="comparisonChart">
+        <canvas id="chartCanvas"></canvas>
+    </div>
+</div>
+
+
             <!-- Panel de Entrada de Datos -->
             <div class="card input-panel">
                 <h2>Datos del Producto</h2>
@@ -213,18 +269,5 @@
                 <div id="recommendation"></div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Gráfico de comparación -->
-<div class="card chart-panel" id="chartPanel" style="display: none;">
-    <h2>📈 Visualización Comparativa</h2>
-    <div class="chart-tabs">
-        <button class="chart-tab active" onclick="switchChart('profit')">Ganancia</button>
-        <button class="chart-tab" onclick="switchChart('margin')">Margen</button>
-        <button class="chart-tab" onclick="switchChart('roi')">ROI</button>
-    </div>
-    <div class="comparison-chart" id="comparisonChart">
-        <canvas id="chartCanvas"></canvas>
     </div>
 </div>
