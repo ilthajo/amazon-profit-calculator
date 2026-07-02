@@ -1,3 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ventas Amazon FBA/FBM</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">📦 Amazon Profit Calc</h1>
+            <p class="subtitle">Calcula tu rentabilidad real en Amazon</p>
+        </header>
+
+        <div class="calculator-grid">
+            <!-- Panel de Entrada de Datos -->
+            <div class="card input-panel">
+                <h2>Datos del Producto</h2>
+                
+                <div class="form-group">
+                    <label for="productName">Nombre del producto</label>
+                    <input type="text" id="productName" placeholder="Ej: Cafetera Premium 15 bares">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="salePrice">Precio de venta ($)</label>
+                        <input type="number" id="salePrice" placeholder="29.99" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="productCost">Costo del producto ($)</label>
+                        <input type="number" id="productCost" placeholder="8.50" step="0.01" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fulfillmentType">Tipo de fulfillment</label>
+                    <select id="fulfillmentType">
+                        <option value="FBA">FBA - Logística de Amazon</option>
+                        <option value="FBM">FBM - Envíos propios</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="shippingCostGroup" style="display: none;">
+                    <label for="shippingCost">Costo de envío (FBM) ($)</label>
+                    <input type="number" id="shippingCost" placeholder="4.99" step="0.01" min="0">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productWeight">Peso del producto (lb)</label>
+                        <input type="number" id="productWeight" placeholder="1.5" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="productSize">Tamaño estándar</label>
+                        <select id="productSize">
+                            <option value="small-standard">Pequeño estándar</option>
+                            <option value="large-standard">Grande estándar</option>
+                            <option value="small-oversize">Pequeño sobredimensionado</option>
+                            <option value="large-oversize">Grande sobredimensionado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Categoría del producto</label>
+                    <select id="category">
+                        <option value="electronics">Electrónicos</option>
+                        <option value="home">Hogar y cocina</option>
+                        <option value="books">Libros</option>
+                        <option value="clothing">Ropa y accesorios</option>
+                        <option value="sports">Deportes</option>
+                        <option value="toys">Juguetes</option>
+                        <option value="beauty">Belleza</option>
+                        <option value="other">Otros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="advertisingCost">Costo publicitario por unidad ($)</label>
+                    <input type="number" id="advertisingCost" placeholder="2.00" step="0.01" min="0" value="0">
+                </div>
+
+                <button class="btn-primary calculate-btn" onclick="calculateProfit()">
+                    <span>📊</span> Calcular Rentabilidad
+                </button>
+            </div>
+
+            <!-- Panel de Resultados -->
+            <div class="card results-panel" id="resultsPanel">
+                <h2>Resultados del Análisis</h2>
+                
+                <div class="results-placeholder" id="resultsPlaceholder">
+                    <div class="placeholder-icon">💰</div>
+                    <p>Ingresa los datos del producto y haz clic en "Calcular Rentabilidad" para ver los resultados</p>
+                </div>
+
+                <div class="results-content" id="resultsContent" style="display: none;">
+                    <div class="product-summary">
+                        <h3 id="resultsProductName">Producto</h3>
+                        <span class="badge" id="resultsFulfillment">FBA</span>
+                    </div>
+
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="result-label">Precio de venta</span>
+                            <span class="result-value" id="resultSalePrice">$0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Tarifa de referencia</span>
+                            <span class="result-value deduction" id="resultReferralFee">-$0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Tarifa FBA/FBM</span>
+                            <span class="result-value deduction" id="resultFulfillmentFee">-$0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Costo del producto</span>
+                            <span class="result-value deduction" id="resultProductCost">-$0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Publicidad</span>
+                            <span class="result-value deduction" id="resultAdvertising">-$0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Costo total</span>
+                            <span class="result-value deduction" id="resultTotalCost">-$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="profit-section">
+                        <div class="profit-main">
+                            <span class="profit-label">Ganancia neta</span>
+                            <span class="profit-value" id="resultNetProfit">$0.00</span>
+                        </div>
+                        <div class="profit-details">
+                            <div class="detail-item">
+                                <span>Margen de ganancia</span>
+                                <span id="resultMargin">0%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>ROI</span>
+                                <span id="resultROI">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container" id="chartContainer">
+                        <h3>Desglose de costos</h3>
+                        <div class="bar-chart" id="costBreakdown">
+                            <!-- Las barras se generarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de cálculos -->
+        <div class="card history-panel">
+            <div class="history-header">
+                <h2>Historial de Cálculos</h2>
+                <button class="btn-text" onclick="clearHistory()">Limpiar historial</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="history-placeholder">
+                    No hay cálculos en el historial
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
 <!-- Panel de Comparación Múltiple -->
 <div class="card comparison-panel">
     <div class="comparison-header">
